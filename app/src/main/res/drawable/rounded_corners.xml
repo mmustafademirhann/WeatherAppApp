@@ -1,0 +1,13 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#33223320" /> <!-- Replace with your desired color -->
+
+    <corners android:radius="40dp" /> <!-- Adjust the radius as needed -->
+    <stroke
+        android:width="4dp"
+    android:color="#33223320" />
+    <padding
+        android:left="8dp"
+        android:top="8dp"
+        android:right="8dp"
+        android:bottom="8dp" />
+</shape>
