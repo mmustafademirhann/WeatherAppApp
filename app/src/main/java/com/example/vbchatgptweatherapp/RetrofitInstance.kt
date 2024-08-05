@@ -11,7 +11,7 @@ object RetrofitInstance {
     const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
     const val appid: String = "042c2ddfb3f95fa918336e6edbd4fe63"
     const val METRIC_UNIT: String = "metric"
-    const val lat:Double=-54.93
+    const val lat:Double=34.93
     const val lon:Double=-67.61
 
 
