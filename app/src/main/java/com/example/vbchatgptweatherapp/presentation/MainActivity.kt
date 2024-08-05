@@ -15,6 +15,8 @@ import com.example.vbchatgptweatherapp.presentation.viewModel.WeatherViewModel
 import com.example.vbchatgptweatherapp.repository.FunctionRepository
 
 
+//gitte yüklendi
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     //private val functionRepo=FunctionRepository()
