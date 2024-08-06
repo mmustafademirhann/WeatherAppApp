@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vbchatgptweatherapp.R
+import com.example.vbchatgptweatherapp.data.modelModelModel.WtWtWeather
 import com.example.vbchatgptweatherapp.databinding.ActivityMainBinding
 import com.example.vbchatgptweatherapp.domain.network.Response
 import com.example.vbchatgptweatherapp.presentation.viewModel.WeatherViewModel
@@ -36,12 +37,13 @@ class MainActivity : AppCompatActivity() {
 
                 // Group the weather data by day
                 val groupedWeather = viewModel.groupWeatherByDay(weatherDataList)
-                val daysAdapter=DaysAdapter(groupedWeather) { weatherForDay ->
+                val daysAdapter=DaysAdapter(weather.data!!,groupedWeather) { weatherForDay ->
                     // Handle the click event, e.g., update another RecyclerView with hourly data
                     // You can use weatherForDay to get the hourly weather data for that specific day
+                    showHourlyWeatherDialog(weatherForDay)
                 }
                 binding.daysRecyclerView.adapter=daysAdapter
-
+                binding.daysRecyclerView.layoutManager = LinearLayoutManager(this)
 
                 // Set the adapter with the grouped data
 
@@ -105,6 +107,10 @@ class MainActivity : AppCompatActivity() {
     }
     fun kelvinToCelsius(kelvin: Double?): String {
         return kelvin?.let { (it - 273.15).toInt().toString() } ?: "N/A"
+    }
+    private fun showHourlyWeatherDialog(hourlyWeather: List<WtWtWeather.WWW>) {
+        // Implement logic to display a dialog or another view to show hourly details
+        // You can use a Dialog, BottomSheet, or another Activity to display the hourly data
     }
 
 
