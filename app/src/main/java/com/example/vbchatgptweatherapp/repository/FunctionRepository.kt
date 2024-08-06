@@ -17,7 +17,7 @@ class FunctionRepository {
         val tempCelsius = tempKelvin?.minus(273.15)
         return tempCelsius != null && tempCelsius < 1
     }
-
+    //view model
     fun isNight():Boolean
     {
 

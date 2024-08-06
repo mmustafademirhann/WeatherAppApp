@@ -6,5 +6,6 @@ data class WeatherItem(
 
 
                        val hourlyWeather: List<WtWtWeather.WWW>,
-                       val date: String
+                       val date: String,
+                       var isExpanded:Boolean=false
 )
