@@ -32,4 +32,7 @@ class HourlyWeatherAdapter(
             return (kelvin - 273.15).toInt().toString()
         }
     }
+
+
+
 }
