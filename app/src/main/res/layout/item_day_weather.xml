@@ -1,47 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:padding="8dp"
+    android:layout_marginTop="0dp"
+    app:cardBackgroundColor="#93293320"
+    app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@drawable/recyclerview_bacground"
+        android:padding="24dp"
+        android:layout_marginBottom="5dp"
+
+
+        >
 
         <TextView
-            android:id="@+id/dateTextVİew"
+            android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="37dp"
-            android:layout_marginTop="16dp"
             android:text="Monday"
-            app:layout_constraintStart_toEndOf="@+id/imageChildView"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageChildView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/dateTextView"
+            app:layout_constraintStart_toEndOf="@id/dateTextView"
+            app:layout_constraintTop_toTopOf="@id/dateTextView"
             app:srcCompat="@drawable/cloudy_sunny" />
 
         <TextView
             android:id="@+id/temperatureChildTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="20°C"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/dateTextVİew"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Container for hourly forecasts -->
@@ -51,9 +57,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp"
-            app:layout_constraintTop_toBottomOf="@id/dateTextVİew"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/dateTextView">
 
             <!-- Hourly data will be added here dynamically -->
 
@@ -61,4 +68,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

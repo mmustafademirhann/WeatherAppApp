@@ -23,8 +23,8 @@ class HourlyWeatherAdapter(
 
     class HourlyViewHolder(private val binding: ItemHourlyWeatherBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(weather: WtWtWeather.WWW) {
-            binding.hourTextVEw.text = weather.dtTxt?.substring(11, 16) // Extract hour from dtTxt
-            binding.temperatureChildTextView.text = "${weather.main?.temp?.let { kelvinToCelsius(it) }}°"
+            binding.timeTextView.text = weather.dtTxt?.substring(11, 16) // Extract hour from dtTxt
+            binding.temperatureTextView.text = "${weather.main?.temp?.let { kelvinToCelsius(it) }}°"
             // Set weather icon based on weather condition
         }
 
@@ -32,4 +32,7 @@ class HourlyWeatherAdapter(
             return (kelvin - 273.15).toInt().toString()
         }
     }
+
+
+
 }

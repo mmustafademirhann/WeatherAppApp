@@ -19,25 +19,33 @@ class WeatherViewModel : ViewModel() {
     private val _weather = MutableLiveData<Response<WtWtWeather>>()
     val weather: LiveData<Response<WtWtWeather>>get() = _weather
 
+    private val _hourlyWeatherData = MutableLiveData<List<WtWtWeather.WWW>>()
+    val hourlyWeatherData: LiveData<List<WtWtWeather.WWW>> get() = _hourlyWeatherData
 
 
+
+
+    fun updateHourlyWeather(hourlyWeather: List<WtWtWeather.WWW>) {
+        _hourlyWeatherData.value = hourlyWeather
+    }
 
 
     fun fetchWeather(city: String) {
 
 
+
+
             //
             viewModelScope.launch {
-                try {
-                    val response = RetrofitInstance.api.getWeather(RetrofitInstance.lat, RetrofitInstance.lon, RetrofitInstance.appid)
 
+
+                try {
+                    //you should send to reporsitory
+                    val response = RetrofitInstance.api.getWeather(RetrofitInstance.lat, RetrofitInstance.lon, RetrofitInstance.appid)
                     response.body()?.let {
                         _weather.postValue(Response.Success(it))
-
-
-
-
                     }
+                    // e-ticaret
 
                     if (response.isSuccessful) {
                         Log.d("WeatherResponse", "Response: ${response.body()}")
@@ -64,6 +72,7 @@ class WeatherViewModel : ViewModel() {
 
 
     }
+    //View types you should study about it
     fun groupWeatherByDay(weatherList: List<WtWtWeather.WWW>?): Map<String, List<WtWtWeather.WWW>> {
         // Create a date formatter to extract the day from the "dtTxt" field
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -74,6 +83,19 @@ class WeatherViewModel : ViewModel() {
             val date = dateFormatter.parse(weatherItem.dtTxt)
             dayFormatter.format(date)
         } ?: emptyMap()
+    }
+
+
+    fun getHoursForDay(weatherList: List<WtWtWeather.WWW>?, day: String): List<WtWtWeather.WWW> {
+        // Create a date formatter to extract the day from the "dtTxt" field
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val dayFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        // Filter the weather data to only include the items for the specified day
+        return weatherList?.filter { weatherItem ->
+            val date = dateFormatter.parse(weatherItem.dtTxt)
+            dayFormatter.format(date) == day
+        } ?: emptyList()
     }
 
 
