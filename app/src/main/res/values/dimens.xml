@@ -4,7 +4,8 @@
     <dimen name="progress_bar_size">50dp</dimen>
     <dimen name="progress_bar_marginEnd">10dp</dimen>
     <dimen name="progress_bar_text_size">16sp</dimen>
-
+    <dimen name="margin_medium">24dp</dimen>
+    <dimen name="text_xlarge">45sp</dimen>
     <dimen name="main_screen_content_padding">16dp</dimen>
     <dimen name="card_view_marginStartEnd">5dp</dimen>
     <dimen name="card_view_marginTop">16dp</dimen>
@@ -19,4 +20,10 @@
     <dimen name="sunrise_marginTop">10dp</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="divider_margin">16dp</dimen>
+    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+
+    <dimen name="text_medium">18sp</dimen>
+    <dimen name="padding_small">5dp</dimen>
+    <dimen name="text_xxlarge">42dp</dimen>
 </resources>
