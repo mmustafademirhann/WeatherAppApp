@@ -44,10 +44,6 @@ class WeatherViewModel : ViewModel() {
                     val response = RetrofitInstance.api.getWeather(RetrofitInstance.lat, RetrofitInstance.lon, RetrofitInstance.appid)
                     response.body()?.let {
                         _weather.postValue(Response.Success(it))
-
-
-
-
                     }
                     // e-ticaret
 

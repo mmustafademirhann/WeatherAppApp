@@ -1,80 +1,101 @@
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vbchatgptweatherapp.R
 import com.example.vbchatgptweatherapp.data.daysHandling.WeatherItem
 import com.example.vbchatgptweatherapp.data.modelModelModel.WtWtWeather
 import com.example.vbchatgptweatherapp.databinding.ItemDayWeatherBinding
 
-
 class DaysAdapter(
-    private val weatherData: WtWtWeather,
-    private val groupedWeather: Map<String, List<WtWtWeather.WWW>>,
-    private val onDayClickListener: ((List<WtWtWeather.WWW>) -> Unit)?
-) : RecyclerView.Adapter<DaysAdapter.DaysViewHolder>() {
-    private val dayList = groupedWeather.keys.toList()
+    private var weatherData: WtWtWeather,
+    private var groupedWeather: Map<String, List<WtWtWeather.WWW>>,
+    private val onDayClickListener: ((String) -> Unit)? // Pass the date as a string
+) : RecyclerView.Adapter<DaysAdapter.DaysViewHolder>() {private val dayList = groupedWeather.keys.toList()
+    var expandedDay: String? = null // Track the currently expanded day
 
-    private val weatherItems = mutableListOf<WeatherItem>()
+    val weatherItems = mutableListOf<WeatherItem>()
 
     init {
-        // Extracting unique dates and create day items with their hourly data
-        val groupedWeather = weatherData.list!!.groupBy { it.dtTxt?.substringBefore(" ") }
+        // Extract unique dates and create day items with their hourly data
         for ((date, hourlyWeather) in groupedWeather) {
-            weatherItems.add(WeatherItem(hourlyWeather, date.toString(), false)) // Initialize isExpanded to false
+            weatherItems.add(WeatherItem(hourlyWeather, date))
         }
     }
 
-    // ... (Only DaysViewHolder is needed now)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding
-        = ItemDayWeatherBinding.inflate(inflater, parent, false)
+        val binding = ItemDayWeatherBinding.inflate(inflater, parent, false)
         return DaysViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DaysViewHolder, position:
-                                  Int) {
+    override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
         val weatherItem = weatherItems[position]
-        holder.bind(weatherItem, onDayClickListener)
+        holder.bind(weatherItem, expandedDay == weatherItem.date) // Pass expansion state
 
         holder.itemView.setOnClickListener {
-            weatherItem.isExpanded = !weatherItem.isExpanded
-            notifyItemChanged(position)
-            onDayClickListener?.invoke(weatherItem.hourlyWeather)
+            onDayClickListener?.invoke(weatherItem.date) // Pass the clicked day's date
         }
     }
 
     override fun getItemCount(): Int = weatherItems.size
 
+    fun updateExpandedDay(newExpandedDay: String?) {
+        expandedDay = newExpandedDay
+        notifyDataSetChanged() // Refresh the adapter to reflect the change
+    }
     class DaysViewHolder(val binding: ItemDayWeatherBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(weatherItem: WeatherItem, onDayClickListener: ((List<WtWtWeather.WWW>) -> Unit)?) {
-            binding.dateTextVEw.text = weatherItem.date
+        fun bind(weatherItem: WeatherItem, isExpanded: Boolean) {
+            binding.dateTextView.text = weatherItem.date
             binding.temperatureChildTextView.text = "${weatherItem.hourlyWeather.firstOrNull()?.main?.temp?.let { kelvinToCelsius(it) }}°"
 
-            binding.hourlyDataContainer.removeAllViews()
-            if (weatherItem.isExpanded) {
-                // Populate hourly data if expanded
+            binding.hourlyDataContainer.removeAllViews() // Clear previous views
+            if (isExpanded) {
                 for (hourlyData in weatherItem.hourlyWeather) {
-                    val hourTextView = TextView(binding.root.context)
-                    hourTextView.text = "${hourlyData.dtTxt?.substringAfter(" ")} - ${hourlyData.main?.temp?.let { kelvinToCelsius(it) }}°"
-                    binding.hourlyDataContainer.addView(hourTextView)
+                    val hourView = LayoutInflater.from(binding.root.context).inflate(
+                        R.layout.item_hourly_weather, // Use your item_hourly_weather layout
+                        binding.hourlyDataContainer,
+                        false
+                    )
+                    val timeTextView = hourView.findViewById<TextView>(R.id.timeTextView)
+                    val temperatureTextView = hourView.findViewById<TextView>(R.id.temperatureTextView)
+                    // Set weather icon in weatherIconImageView (if needed)
+
+                    timeTextView.text = hourlyData.dtTxt?.substring(11, 16)
+                    temperatureTextView.text = "${hourlyData.main?.temp?.let { kelvinToCelsius(it) }}°"
+
+                    binding.hourlyDataContainer.addView(hourView)
                 }
+                binding.hourlyDataContainer.visibility = View.VISIBLE
             } else {
-                // Hide hourly data if collapsed
                 binding.hourlyDataContainer.visibility = View.GONE
             }
-
-            binding.root.setOnClickListener {
-                // Handle click event here if needed
-            }
         }
-
 
         private fun kelvinToCelsius(kelvin: Double): String {
             return (kelvin - 273.15).toInt().toString()
         }
     }
+
+    fun updateWeatherData(newWeatherData: WtWtWeather, newGroupedWeather: Map<String, List<WtWtWeather.WWW>>) {
+        weatherData = newWeatherData
+        groupedWeather = newGroupedWeather
+        weatherItems.clear()
+        for ((date, hourlyWeather) in groupedWeather) {
+            weatherItems.add(WeatherItem(hourlyWeather, date))
+        }
+        notifyDataSetChanged()
+    }
+
+
+
+
+
+
+
+
+
+
 }
