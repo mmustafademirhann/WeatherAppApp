@@ -19,6 +19,7 @@ class DaysAdapter(
     val weatherItems = mutableListOf<WeatherItem>()
 
     init {
+        updateWeatherItems()
         // Extract unique dates and create day items with their hourly data
         for ((date, hourlyWeather) in groupedWeather) {
             weatherItems.add(WeatherItem(hourlyWeather, date))
@@ -77,23 +78,26 @@ class DaysAdapter(
         private fun kelvinToCelsius(kelvin: Double): String {
             return (kelvin - 273.15).toInt().toString()
         }
+
     }
+
+
+
 
     fun updateWeatherData(newWeatherData: WtWtWeather, newGroupedWeather: Map<String, List<WtWtWeather.WWW>>) {
         weatherData = newWeatherData
         groupedWeather = newGroupedWeather
-        weatherItems.clear()
-        for ((date, hourlyWeather) in groupedWeather) {
-            weatherItems.add(WeatherItem(hourlyWeather, date))
-        }
+        updateWeatherItems() // Update the weatherItems list
         notifyDataSetChanged()
     }
 
 
-
-
-
-
+    private fun updateWeatherItems() {
+        weatherItems.clear()
+        for ((date, hourlyWeather) in groupedWeather) {
+            weatherItems.add(WeatherItem(hourlyWeather, date))
+        }
+    }
 
 
 

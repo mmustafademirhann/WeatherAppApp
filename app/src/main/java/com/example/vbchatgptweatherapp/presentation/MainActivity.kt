@@ -53,18 +53,22 @@ class MainActivity : AppCompatActivity() {
                 //var snow=
                 when(weatherDataString){
                     "Clouds"->{
-                        binding.root.setBackgroundResource(R.drawable.cloudy_bg)
+                        //binding.root.setBackgroundResource(R.drawable.cloudy_bg)
                         binding.weatherIcon.setImageResource(R.drawable.cloudy)
+                        binding.bacgroundic.setImageResource(R.drawable.clody_wallpmine)
+
                     }
 
                     "Snow" ->{
-                        binding.root.setBackgroundResource(R.drawable.snow_bg)
+                        //binding.root.setBackgroundResource(R.drawable.snow_bg)
                         binding.weatherIcon.setImageResource(R.drawable.snowy)
+                        binding.bacgroundic.setImageResource(R.drawable.snow_minecraft)
 
                     }
                     "Rain" ->{
-                        binding.root.setBackgroundResource(R.drawable.rainy_bg)
-                        binding.weatherIcon.setImageResource(R.drawable.rainy)
+                        //binding.root.setBackgroundResource(R.drawable.rainy_bg)
+                        binding.weatherIcon.setImageResource(R.drawable.rainy_img_mnc)
+                        binding.bacgroundic.setImageResource(R.drawable.rainy_minecraft)
                     }
 
 
@@ -134,6 +138,11 @@ class MainActivity : AppCompatActivity() {
                         binding.root.setBackgroundResource(R.drawable.cloudy_bg)
 
                 }*/
+
+
+
+
+
             }else if(weather is Response.ErrorResponse){
                 Toast.makeText(this,"error",Toast.LENGTH_SHORT)
             }
@@ -147,7 +156,13 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
+    /*what ı have to add for project
+    * 1loadBar
+    * 2Permissions
+    * 3ConfigirationChanges
+    * 4Apı
+    * 5map
+    * */
 
     }
     fun kelvinToCelsius(kelvin: Double?): String {

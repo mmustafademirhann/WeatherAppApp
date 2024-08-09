@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:background="@drawable/hour_apperiance"
-    app:cardBackgroundColor="#33223320"
     android:padding="5dp"
     android:layout_marginTop="5dp">
 
     <TextView
         android:id="@+id/timeTextView"
-        android:layout_width="2dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="10:00 AM" />
+        android:text="10:00 AM"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/press_start_2p"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/weatherIconImageView"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@drawable/cloudy" />
+        android:layout_marginStart="65dp"
+
+        android:src="@drawable/cloud_mnc"
+        app:layout_constraintBottom_toBottomOf="@id/timeTextView"
+        app:layout_constraintStart_toEndOf="@id/timeTextView"
+        app:layout_constraintTop_toTopOf="@id/timeTextView" />
 
     <TextView
         android:id="@+id/temperatureTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:text="20°C"
+        android:fontFamily="@font/press_start_2p"
+        android:textColor="@android:color/white"
         android:gravity="end"
-        android:text="20°C" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
