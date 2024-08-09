@@ -1,11 +1,13 @@
 package com.example.vbchatgptweatherapp.presentation
 
 import DaysAdapter
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vbchatgptweatherapp.R
@@ -26,12 +28,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.daysRecyclerView.layoutManager=LinearLayoutManager(this)
-
+        val topContent = findViewById<LinearLayout>(R.id.top_content)
+        adjustTopContentMargin(topContent)
 
         viewModel.weather.observe(this, Observer { weather ->
             if (weather is Response.Success){
@@ -169,6 +173,27 @@ class MainActivity : AppCompatActivity() {
         return kelvin?.let { (it - 273.15).toInt().toString() } ?: "N/A"
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {super.onConfigurationChanged(newConfig)
+        val topContent = findViewById<LinearLayout>(R.id.top_content)
+        adjustTopContentMargin(topContent)
+    }
+
+    private fun adjustTopContentMargin(topContent: LinearLayout) {
+        val params = topContent.layoutParams as ConstraintLayout.LayoutParams
+        val margin = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            100.dpToPx() // 4dp margin for portrait
+        } else {
+            4.dpToPx() // 100dp margin for landscape
+        }
+        params.topMargin = margin
+        topContent.layoutParams = params
+    }
+
+    // Helper function to convert dp to pixels
+    private fun Int.dpToPx(): Int {
+        val scale = resources.displayMetrics.density
+        return (this * scale + 0.5f).toInt()
+    }
 
 
 

@@ -51,7 +51,15 @@ class DaysAdapter(
         fun bind(weatherItem: WeatherItem, isExpanded: Boolean) {
             binding.dateTextView.text = weatherItem.date
             binding.temperatureChildTextView.text = "${weatherItem.hourlyWeather.firstOrNull()?.main?.temp?.let { kelvinToCelsius(it) }}°"
+            val weatherCondition = weatherItem.hourlyWeather.firstOrNull()?.weather?.firstOrNull()?.main
+            //val weatherCondition = weatherItem.hourlyWeather.firstOrNull()?.weather?.firstOrNull()?.main
 
+            // Update the image based on the weather condition
+            when (weatherCondition) {
+                "Clouds" -> binding.imageChildView.setImageResource(R.drawable.cloud_mnc)
+                "Rain" -> binding.imageChildView.setImageResource(R.drawable.rainy_img_mnc)
+                "Snow" -> binding.imageChildView.setImageResource(R.drawable.snowy)else -> binding.imageChildView.setImageResource(R.drawable.sunny_cloudy_mnc)
+            }
             binding.hourlyDataContainer.removeAllViews() // Clear previous views
             if (isExpanded) {
                 for (hourlyData in weatherItem.hourlyWeather) {
@@ -63,9 +71,19 @@ class DaysAdapter(
                     val timeTextView = hourView.findViewById<TextView>(R.id.timeTextView)
                     val temperatureTextView = hourView.findViewById<TextView>(R.id.temperatureTextView)
                     // Set weather icon in weatherIconImageView (if needed)
-
+                    val weatherIconImageView = hourView.findViewById<ImageView>(R.id.weatherIconImageView) // Define weatherIconImageView here
                     timeTextView.text = hourlyData.dtTxt?.substring(11, 16)
                     temperatureTextView.text = "${hourlyData.main?.temp?.let { kelvinToCelsius(it) }}°"
+                    val weatherConditio = hourlyData.weather?.firstOrNull()?.main
+                    when (weatherConditio) {
+                        "Clouds" -> weatherIconImageView.setImageResource(R.drawable.cloud_mnc)
+                        "Rain" -> weatherIconImageView.setImageResource(R.drawable.rainy_img_mnc)
+                        "Snow" -> weatherIconImageView.setImageResource(R.drawable.snowy)
+                        else -> weatherIconImageView.setImageResource(R.drawable.sunny_cloudy_mnc)
+                    }
+
+
+
 
                     binding.hourlyDataContainer.addView(hourView)
                 }
@@ -98,8 +116,4 @@ class DaysAdapter(
             weatherItems.add(WeatherItem(hourlyWeather, date))
         }
     }
-
-
-
-
 }
