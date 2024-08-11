@@ -14,6 +14,7 @@ import com.example.vbchatgptweatherapp.R
 import com.example.vbchatgptweatherapp.data.modelModelModel.WtWtWeather
 import com.example.vbchatgptweatherapp.databinding.ActivityMainBinding
 import com.example.vbchatgptweatherapp.domain.network.Response
+import com.example.vbchatgptweatherapp.presentation.viewModel.CurrentViewModel
 import com.example.vbchatgptweatherapp.presentation.viewModel.WeatherViewModel
 import com.example.vbchatgptweatherapp.repository.FunctionRepository
 
@@ -23,6 +24,7 @@ import com.example.vbchatgptweatherapp.repository.FunctionRepository
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: WeatherViewModel by viewModels()
+    private val viewModel2:CurrentViewModel by viewModels()
     private var daysAdapter:DaysAdapter? = null
     //private val functionRepo=FunctionRepository()
 
@@ -37,6 +39,30 @@ class MainActivity : AppCompatActivity() {
         val topContent = findViewById<LinearLayout>(R.id.top_content)
         adjustTopContentMargin(topContent)
 
+        viewModel2.weatherCurrent.observe(this, Observer { weatherCurrent ->
+            if (weatherCurrent is Response.Success){
+
+                val weatherData = weatherCurrent.data?.main
+                //val weatherDataString = weatherCurrent.data?.list?.firstOrNull()?.weather?.firstOrNull()?.main
+                binding.temperature.text = "${kelvinToCelsius(weatherData?.temp)}°"
+
+
+            }else if(weatherCurrent is Response.ErrorResponse){
+                //Toast.makeText(this,"error",Toast.LENGTH_SHORT)
+
+            }
+
+
+
+        })
+
+
+
+
+
+
+
+
         viewModel.weather.observe(this, Observer { weather ->
             if (weather is Response.Success){
 
@@ -45,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
                 val weatherData = weather.data?.list?.firstOrNull()?.main
                 val weatherDataString = weather.data?.list?.firstOrNull()?.weather?.firstOrNull()?.main
-                binding.temperature.text = "${kelvinToCelsius(weatherData?.temp)}°"
+                //binding.temperature.text = "${kelvinToCelsius(weatherData?.temp)}°"
                 /*binding.temperature.text = "${((weather.data?.list?.firstOrNull()?.main?.temp?.toInt())?.minus(
                     (273)
                 )).toString()}°"*/
@@ -58,21 +84,24 @@ class MainActivity : AppCompatActivity() {
                 when(weatherDataString){
                     "Clouds"->{
                         //binding.root.setBackgroundResource(R.drawable.cloudy_bg)
-                        binding.weatherIcon.setImageResource(R.drawable.cloudy)
                         binding.bacgroundic.setImageResource(R.drawable.clody_wallpmine)
+                        binding.weatherIcon.setImageResource(R.drawable.cloud_mnc)
 
                     }
 
                     "Snow" ->{
-                        //binding.root.setBackgroundResource(R.drawable.snow_bg)
-                        binding.weatherIcon.setImageResource(R.drawable.snowy)
                         binding.bacgroundic.setImageResource(R.drawable.snow_minecraft)
+                        binding.weatherIcon.setImageResource(R.drawable.snowy)
+
+
+                        //binding.root.setBackgroundResource(R.drawable.snow_bg)
+                        //binding.weatherIcon.setImageResource(R.drawable.snowy)
 
                     }
                     "Rain" ->{
-                        //binding.root.setBackgroundResource(R.drawable.rainy_bg)
-                        binding.weatherIcon.setImageResource(R.drawable.rainy_img_mnc)
                         binding.bacgroundic.setImageResource(R.drawable.rainy_minecraft)
+                        binding.weatherIcon.setImageResource(R.drawable.rainy_img_mnc)
+
                     }
 
 
@@ -142,11 +171,6 @@ class MainActivity : AppCompatActivity() {
                         binding.root.setBackgroundResource(R.drawable.cloudy_bg)
 
                 }*/
-
-
-
-
-
             }else if(weather is Response.ErrorResponse){
                 Toast.makeText(this,"error",Toast.LENGTH_SHORT)
             }
@@ -160,13 +184,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-    /*what ı have to add for project
-    * 1loadBar
-    * 2Permissions
-    * 3ConfigirationChanges
-    * 4Apı
-    * 5map
-    * */
+
 
     }
     fun kelvinToCelsius(kelvin: Double?): String {
@@ -181,9 +199,9 @@ class MainActivity : AppCompatActivity() {
     private fun adjustTopContentMargin(topContent: LinearLayout) {
         val params = topContent.layoutParams as ConstraintLayout.LayoutParams
         val margin = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            100.dpToPx() // 4dp margin for portrait
+            140.dpToPx() // 4dp margin for portrait
         } else {
-            4.dpToPx() // 100dp margin for landscape
+            14.dpToPx() // 100dp margin for landscape
         }
         params.topMargin = margin
         topContent.layoutParams = params
