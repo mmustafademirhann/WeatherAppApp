@@ -22,15 +22,12 @@ class WeatherViewModel : ViewModel() {
     private val _hourlyWeatherData = MutableLiveData<List<WtWtWeather.WWW>>()
     val hourlyWeatherData: LiveData<List<WtWtWeather.WWW>> get() = _hourlyWeatherData
 
-
-
-
     fun updateHourlyWeather(hourlyWeather: List<WtWtWeather.WWW>) {
         _hourlyWeatherData.value = hourlyWeather
     }
 
 
-    fun fetchWeather(city: String) {
+    fun fetchWeather(city: String,latitude:Double,longitude:Double) {
 
 
 

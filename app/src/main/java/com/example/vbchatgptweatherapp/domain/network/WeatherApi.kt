@@ -4,6 +4,7 @@ import com.example.vbchatgptweatherapp.data.modelModel.WeatherWeather
 import com.example.vbchatgptweatherapp.data.modelModelModel.GeoModel
 import com.example.vbchatgptweatherapp.data.modelModelModel.WeatherCurrent
 import com.example.vbchatgptweatherapp.data.modelModelModel.WtWtWeather
+import com.example.vbchatgptweatherapp.data.modelModelModel.secndTry.GeoCityModel
 import com.example.vbchatgptweatherapp.data.models.WeatherResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -28,13 +29,13 @@ interface WeatherApi {
     ): Response<WeatherCurrent>
 
 
-    @GET("geo/10/direct")
-    fun getGeo(
+    @GET("geo")
+    suspend fun getGeo(
         @Query("q") q:String,
         @Query("limit") limit:Int,
         @Query("appid") ApiKey: String,
         //  @Query("units") units: String = "metric"
-    ): Response<GeoModel>
+    ): Response<GeoCityModel>
 
 
 

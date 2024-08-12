@@ -21,10 +21,13 @@ class CurrentViewModel:ViewModel() {
 
 
 
-
         //
+
+
+
         viewModelScope.launch {
 
+            _weatherCurrent.value = Response.LoadingState() // Emit LoadingState
 
             try {
                 //you should send to reporsitory
