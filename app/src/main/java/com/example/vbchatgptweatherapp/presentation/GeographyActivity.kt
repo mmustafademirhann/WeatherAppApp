@@ -13,6 +13,7 @@ import com.example.vbchatgptweatherapp.R
 import com.example.vbchatgptweatherapp.RetrofitInstance
 import com.example.vbchatgptweatherapp.data.modelModelModel.GeoModel
 import com.example.vbchatgptweatherapp.data.modelModelModel.secndTry.GeoCityModel
+import com.example.vbchatgptweatherapp.data.modelModelModel.trdTry.GeographiaCityModels
 import com.example.vbchatgptweatherapp.databinding.ActivityGeographyBinding
 import com.example.vbchatgptweatherapp.databinding.ActivityMainBinding
 import com.example.vbchatgptweatherapp.domain.network.Response
@@ -34,7 +35,7 @@ class GeographyActivity : AppCompatActivity() {
             when (cityList) {
                 is Response.LoadingState -> { /* Show loading indicator if needed */ }
                 is Response.Success -> {
-                    geograpyhAdapter?.updateGeoData(GeoCityModel())
+                    geograpyhAdapter?.updateGeoData(GeographiaCityModels())
                 }
                 is Response.Error -> { /* Handle error, show error message */ }
                 is Response.ErrorResponse -> { /* Handle error response, show error message */ }

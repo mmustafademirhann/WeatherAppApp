@@ -26,6 +26,7 @@ class HourlyWeatherAdapter(
             binding.timeTextView.text = weather.dtTxt?.substring(11, 16) // Extract hour from dtTxt
             binding.temperatureTextView.text = "${weather.main?.temp?.let { kelvinToCelsius(it) }}°"
             // Set weather icon based on weather condition
+
         }
 
         private fun kelvinToCelsius(kelvin: Double): String {

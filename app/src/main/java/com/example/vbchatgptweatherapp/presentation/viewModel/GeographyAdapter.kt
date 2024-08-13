@@ -5,10 +5,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vbchatgptweatherapp.data.modelModelModel.GeoModel
 import com.example.vbchatgptweatherapp.data.modelModelModel.secndTry.GeoCityModel
+import com.example.vbchatgptweatherapp.data.modelModelModel.trdTry.GeographiaCityModels
 import com.example.vbchatgptweatherapp.databinding.GeographyViewholderBinding // Make sure this import is correct
 import com.example.vbchatgptweatherapp.presentation.MainActivity
 
-class GeographyAdapter(private var geoData: GeoCityModel) :
+class GeographyAdapter(private var geoData: GeographiaCityModels) :
     RecyclerView.Adapter<GeographyAdapter.GeographyViewHolder>() {
 
     class GeographyViewHolder(val binding: GeographyViewholderBinding) :
@@ -37,7 +38,7 @@ class GeographyAdapter(private var geoData: GeoCityModel) :
     }
     override fun getItemCount(): Int = geoData.size
 
-    fun updateGeoData(newGeoData: GeoCityModel) {
+    fun updateGeoData(newGeoData: GeographiaCityModels) {
         geoData = newGeoData
         notifyDataSetChanged()
     }
