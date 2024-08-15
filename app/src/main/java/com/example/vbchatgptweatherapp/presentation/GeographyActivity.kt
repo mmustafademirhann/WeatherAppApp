@@ -43,6 +43,8 @@ class GeographyActivity : AppCompatActivity() {
                 is Response.Error -> {
                     // Handle error, show error message
                     Log.e("GeographyActivity", "Error: ${response.message}")
+                    //respons error mesajı burayada yaılsın
+                    binding.textView.text = response.message
                 }
 
                 is Response.ErrorResponse -> {

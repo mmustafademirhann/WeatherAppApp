@@ -1,8 +1,11 @@
 package com.example.vbchatgptweatherapp.presentation
 
 import DaysAdapter
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vbchatgptweatherapp.R
@@ -35,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel2:CurrentViewModel by viewModels()
     private var daysAdapter:DaysAdapter? = null
     private val viewModConfig by viewModels<ConfigViewModel>()
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
 
 
@@ -246,6 +252,9 @@ class MainActivity : AppCompatActivity() {
             viewModel.fetchWeather(name.orEmpty(), latitude = lat, longitude = lon)
             viewModel2.fetchWeatherCurrent(name.orEmpty(), latitude = lat, longitude = lon)
         }
+
+        checkLocationPermissions()
+
     }
 
     fun kelvinToCelsius(kelvin: Double?): String {
@@ -296,5 +305,47 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
     }
+    private fun checkLocationPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val fineLocationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            val coarseLocationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+
+            if (fineLocationPermission != PackageManager.PERMISSION_GRANTED ||
+                coarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
+
+                // Request permissions if they are not granted
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE)
+            } else {
+                // Permissions are already granted
+                onLocationPermissionsGranted()
+            }
+        } else {
+            // Permissions are automatically granted for versions below Marshmallow
+            onLocationPermissionsGranted()
+        }
+    }
+
+    // Handle the result of the permission request
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissions granted
+                onLocationPermissionsGranted()
+            } else {
+                // Permissions denied
+                Toast.makeText(this, "Location permissions are required to use this feature", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // This function will be called when the location permissions are granted
+    private fun onLocationPermissionsGranted() {
+        // Your code to handle location functionality here
+    }
+
+
 }
 //

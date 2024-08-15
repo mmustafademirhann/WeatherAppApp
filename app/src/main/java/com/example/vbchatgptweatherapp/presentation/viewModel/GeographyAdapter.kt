@@ -16,13 +16,14 @@ class GeographyAdapter : RecyclerView.Adapter<GeographyAdapter.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(city: GeographiaCityModels.GeographiaCityModelsItem) {
             binding.cityTextView.text = city.name
-            binding.root.setOnClickListener {
+            itemView.setOnClickListener{
                 val intent = Intent(binding.root.context, MainActivity::class.java)
                 intent.putExtra("lat", city.lat)
                 intent.putExtra("lon", city.lon)
                 intent.putExtra("name", city.name)
                 binding.root.context.startActivity(intent)
             }
+
         }
     }
 
