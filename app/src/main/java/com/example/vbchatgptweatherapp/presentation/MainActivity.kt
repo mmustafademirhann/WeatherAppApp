@@ -56,14 +56,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, GeographyActivity::class.java)
             startActivity(intent)
         }
-        var cityName = intent.getStringExtra("selectedCityName") ?: ""
-        var latitude = intent.getDoubleExtra("selectedCityLat", 0.0)
-        var longitude = intent.getDoubleExtra("selectedCityLon", 0.0)
 
-        if (latitude != 0.0 && longitude != 0.0) {
-            viewModel.fetchWeather(cityName, latitude, longitude) // Fetch weather data
-            // ... rest of your code
-        }
+
+
+
 
         viewModel2.weatherCurrent.observe(this, Observer { weatherCurrent ->
 
@@ -239,18 +235,19 @@ class MainActivity : AppCompatActivity() {
         val city = binding.cityName.text.toString()
         if (city.isNotEmpty()) {
             viewModel.fetchWeather(city,latitude = 0.0, longitude = 0.0)
-            viewModel2.fetchWeatherCurrent(city)
+            viewModel2.fetchWeatherCurrent(city, latitude = 0.0, longitude = 0.0)
         }
 
+        binding.apply {
+            var lat=intent.getDoubleExtra("lat",0.0)
+            var lon=intent.getDoubleExtra("lon",0.0)
+            var name=intent.getStringExtra("name")
 
-        cityName = intent.getStringExtra("cityName") ?: ""
-        latitude = intent.getDoubleExtra("latitude", 0.0)
-        longitude = intent.getDoubleExtra("longitude", 0.0)
-
-        if (latitude != 0.0 && longitude != 0.0) {
-            viewModel.fetchWeather(cityName, latitude, longitude) // Fetch weather data
+            viewModel.fetchWeather(name.orEmpty(), latitude = lat, longitude = lon)
+            viewModel2.fetchWeatherCurrent(name.orEmpty(), latitude = lat, longitude = lon)
         }
     }
+
     fun kelvinToCelsius(kelvin: Double?): String {
         return kelvin?.let { (it - 273.15).toInt().toString() } ?: "N/A"
     }

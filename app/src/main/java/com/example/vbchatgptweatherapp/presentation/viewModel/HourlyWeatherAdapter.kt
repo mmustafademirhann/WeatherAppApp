@@ -10,7 +10,7 @@ class HourlyWeatherAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemHourlyWeatherBinding.inflate(inflater, parent, false) // Adjust based on your item layout
+        val binding = ItemHourlyWeatherBinding.inflate(inflater, parent,false) // Adjust based on your item layout
         return HourlyViewHolder(binding)
     }
 

@@ -9,12 +9,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 //  api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}&appid={API key}
 object RetrofitInstance {
     const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+    const val BASE_URL_GEO="https://api.openweathermap.org/geo/1.0/"
     const val appid: String = "042c2ddfb3f95fa918336e6edbd4fe63"
     const val METRIC_UNIT: String = "metric"
-    const val lat:Double=63.446827
-    const val lon:Double=10.421906
-    const val q:String="London"
-    const val limit:Int=12
+    const val q:String=""
+    const val limit:Int=5
+
 
 
 
@@ -26,6 +26,11 @@ object RetrofitInstance {
             .build()
             .create(WeatherApi::class.java)
     }
-
-
+    val geoApi: WeatherApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL_GEO)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(WeatherApi::class.java)
+    }
 }

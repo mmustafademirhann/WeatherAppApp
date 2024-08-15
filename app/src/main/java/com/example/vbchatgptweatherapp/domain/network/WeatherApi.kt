@@ -30,8 +30,8 @@ interface WeatherApi {
     ): Response<WeatherCurrent>
 
 
-    @GET("geo")
-    suspend fun getGeo(
+    @GET("direct")
+     suspend fun getGeo(
         @Query("q") q:String,
         @Query("limit") limit:Int,
         @Query("appid") ApiKey: String,

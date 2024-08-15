@@ -38,7 +38,7 @@ class WeatherViewModel : ViewModel() {
 
                 try {
                     //you should send to reporsitory
-                    val response = RetrofitInstance.api.getWeather(RetrofitInstance.lat, RetrofitInstance.lon, RetrofitInstance.appid)
+                    val response = RetrofitInstance.api.getWeather(latitude, longitude, RetrofitInstance.appid)
                     response.body()?.let {
                         _weather.postValue(Response.Success(it))
                     }

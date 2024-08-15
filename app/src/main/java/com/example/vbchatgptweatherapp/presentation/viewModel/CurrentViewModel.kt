@@ -17,7 +17,7 @@ class CurrentViewModel:ViewModel() {
     val weatherCurrent: LiveData<Response<WeatherCurrent>>
     get() = _weatherCurrent
 
-    fun fetchWeatherCurrent(city: String) {
+    fun fetchWeatherCurrent(city: String, latitude:Double,longitude:Double) {
 
 
 
@@ -31,7 +31,7 @@ class CurrentViewModel:ViewModel() {
 
             try {
                 //you should send to reporsitory
-                val response = RetrofitInstance.api.getWeatherCurrent(RetrofitInstance.lat, RetrofitInstance.lon, RetrofitInstance.appid)
+                val response = RetrofitInstance.api.getWeatherCurrent(latitude, longitude, RetrofitInstance.appid)
                 response.body()?.let {
                     _weatherCurrent.postValue(Response.Success(it))
                 }
