@@ -26,6 +26,7 @@ import com.example.vbchatgptweatherapp.presentation.viewModel.ConfigViewModel
 import com.example.vbchatgptweatherapp.presentation.viewModel.CurrentViewModel
 import com.example.vbchatgptweatherapp.presentation.viewModel.WeatherViewModel
 import com.example.vbchatgptweatherapp.repository.FunctionRepository
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -41,7 +42,9 @@ class MainActivity : AppCompatActivity() {
     private var daysAdapter:DaysAdapter? = null
     private val viewModConfig by viewModels<ConfigViewModel>()
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
-
+    private val isFromSearch:Boolean? by lazy{
+        intent.getBooleanExtra("isFromSearch",false)
+    }
 
 
     //private val functionRepo=FunctionRepository()
@@ -53,6 +56,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if (isFromSearch==false){
+            checkLocationPermissions()
+        }else {
+            isSearched()
+        }
 
         binding.daysRecyclerView.layoutManager=LinearLayoutManager(this)
         val topContent = findViewById<LinearLayout>(R.id.top_content)
@@ -68,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
 
         viewModel2.weatherCurrent.observe(this, Observer { weatherCurrent ->
-
+            showWelcomeFragment()
             when (weatherCurrent) {
                 is Response.LoadingState ->{
                     hideWelcomeFragment()
@@ -238,25 +246,22 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        val city = binding.cityName.text.toString()
-        if (city.isNotEmpty()) {
-            viewModel.fetchWeather(city,latitude = 0.0, longitude = 0.0)
-            viewModel2.fetchWeatherCurrent(city, latitude = 0.0, longitude = 0.0)
-        }
 
-        binding.apply {
-            var lat=intent.getDoubleExtra("lat",0.0)
-            var lon=intent.getDoubleExtra("lon",0.0)
-            var name=intent.getStringExtra("name")
 
-            viewModel.fetchWeather(name.orEmpty(), latitude = lat, longitude = lon)
-            viewModel2.fetchWeatherCurrent(name.orEmpty(), latitude = lat, longitude = lon)
-        }
 
-        checkLocationPermissions()
+
+
+
 
     }
+    fun isSearched(){
+        var lat=intent.getDoubleExtra("lat",0.0)
+        var lon=intent.getDoubleExtra("lon",0.0)
+        var name=intent.getStringExtra("name")
 
+        viewModel.fetchWeather(name.orEmpty(), latitude = lat, longitude = lon)
+        viewModel2.fetchWeatherCurrent(name.orEmpty(), latitude = lat, longitude = lon)
+    }
     fun kelvinToCelsius(kelvin: Double?): String {
         return kelvin?.let { (it - 273.15).toInt().toString() } ?: "N/A"
     }
@@ -343,8 +348,41 @@ class MainActivity : AppCompatActivity() {
 
     // This function will be called when the location permissions are granted
     private fun onLocationPermissionsGranted() {
-        // Your code to handle location functionality here
+        // Initialize FusedLocationProviderClient
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Check if the location is available
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    // Use the location coordinates to fetch weather data
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+
+                    // Fetch weather data using the obtained latitude and longitude
+                    val city = binding.cityName.text.toString()
+
+                    if (city.isNotEmpty()) {
+                        viewModel.fetchWeather(city, latitude, longitude)
+                        viewModel2.fetchWeatherCurrent(city, latitude, longitude)
+                    } else {
+                        // Handle the case where city name is empty
+                        Toast.makeText(this, "Please enter a city name", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    // Handle the case where location is null
+                    Toast.makeText(this, "Unable to retrieve location. Please try again.", Toast.LENGTH_SHORT).show()
+                }
+            }.addOnFailureListener { e ->
+                // Handle any errors while fetching location
+                Toast.makeText(this, "Failed to get location: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Handle the case where location permission was granted but still unable to fetch location
+            Toast.makeText(this, "Location permission granted but unable to fetch location.", Toast.LENGTH_SHORT).show()
+        }
     }
+
 
 
 }
