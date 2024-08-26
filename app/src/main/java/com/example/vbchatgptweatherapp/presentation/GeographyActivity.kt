@@ -1,6 +1,7 @@
 package com.example.vbchatgptweatherapp.presentation
 
 import GeographyAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,9 +15,9 @@ import com.example.vbchatgptweatherapp.databinding.ActivityGeographyBinding
 import com.example.vbchatgptweatherapp.domain.network.Response
 import com.example.vbchatgptweatherapp.presentation.viewModel.GeoViewModel
 
-class GeographyActivity : AppCompatActivity() {
+class GeographyActivity : AppCompatActivity(), GeographyAdapter.OnItemClickListener {
     private lateinit var binding: ActivityGeographyBinding
-    private val geographyAdapter by lazy { GeographyAdapter() }
+    private val geographyAdapter by lazy { GeographyAdapter(this) }
     private val geoViewModel: GeoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,5 +73,15 @@ class GeographyActivity : AppCompatActivity() {
                 Log.d("GeographyActivity", "Text changing: $s")
             }
         })
+    }
+
+    override fun onItemClick(lat: Double?, lon: Double?, name: String?, isFromSearch: Boolean) {
+        val intent = Intent(binding.root.context, MainActivity::class.java)
+        intent.putExtra("lat", lat)
+        intent.putExtra("lon", lon)
+        intent.putExtra("name",name)
+        intent.putExtra("isFromSearch",true)
+        binding.root.context.startActivity(intent)
+        finish()
     }
 }

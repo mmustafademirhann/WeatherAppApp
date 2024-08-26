@@ -2,6 +2,7 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,21 +11,19 @@ import com.example.vbchatgptweatherapp.databinding.AddCityBinding
 import com.example.vbchatgptweatherapp.databinding.GeographyViewholderBinding
 import com.example.vbchatgptweatherapp.presentation.MainActivity
 
-class GeographyAdapter : RecyclerView.Adapter<GeographyAdapter.ViewHolder>() {
+class GeographyAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<GeographyAdapter.ViewHolder>() {
 
     private lateinit var binding: AddCityBinding
-
+    interface OnItemClickListener{
+        fun onItemClick(lat: Double?,lon:Double?,name:String?,isFromSearch:Boolean)
+        }
     inner class ViewHolder(val binding: AddCityBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(city: GeographiaCityModels.GeographiaCityModelsItem) {
             binding.addCity.text = city.name
             itemView.setOnClickListener {
-                val intent = Intent(binding.root.context, MainActivity::class.java)
-                intent.putExtra("lat", city.lat)
-                intent.putExtra("lon", city.lon)
-                intent.putExtra("name", city.name)
-                intent.putExtra("isFromSearch",true)
-                binding.root.context.startActivity(intent)
+                listener.onItemClick(city.lat,city.lon,city.name,true)
+
             }
         }
     }

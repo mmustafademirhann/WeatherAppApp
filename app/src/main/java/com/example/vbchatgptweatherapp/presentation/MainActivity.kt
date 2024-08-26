@@ -2,6 +2,7 @@ package com.example.vbchatgptweatherapp.presentation
 
 import DaysAdapter
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private val isFromSearch:Boolean? by lazy{
         intent.getBooleanExtra("isFromSearch",false)
+    }
+    private val isFromBackPress:Boolean? by lazy{
+        intent.getBooleanExtra("isFromBackPress",false)
     }
 
 
@@ -286,20 +290,36 @@ class MainActivity : AppCompatActivity() {
         params.topMargin = margin
         topContent.layoutParams = params
     }
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        if (isFromSearch==false||isFromBackPress==true){
+            finishAffinity()
+            System.exit(0)
+        }
+        else{
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("isFromBackPress",true)
+            startActivity(intent)
+            finish()
+        }
 
+    }
     // Helper function to convert dp to pixels
     private fun Int.dpToPx(): Int {
         val scale = resources.displayMetrics.density
         return (this * scale + 0.5f).toInt()
     }
     private fun showWelcomeFragment() {
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(60000) // Delay for 1 second (adjust as needed)
-        }
+        if(isFromBackPress==false){
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(60000) // Delay for 1 second (adjust as needed)
+            }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, WelcomeLoadFragment(), "fragment_welcome_load")
-            .commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, WelcomeLoadFragment(), "fragment_welcome_load")
+                .commit()
+
+        }
 
     }
     private fun hideWelcomeFragment() {
